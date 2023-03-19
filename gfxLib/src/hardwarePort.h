@@ -5,6 +5,8 @@
 #define __weak   __attribute__((weak))
 #endif // __weak 
 
+extern int gfxHeight, gfxWidth;
+
 void setPixel(int x, int y, unsigned short color);
 void hLine(int x0, int x1, int y, unsigned short color);
 void vLine(int x, int y0, int y1, unsigned short color);
