@@ -71,8 +71,27 @@ void gfx2d_line(int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint16_t color) 
 
 }
 
+void gfx2d_triangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t x2, int32_t y2, uint16_t color) {
+}
+void gfx2d_rect(int32_t x, int32_t y, int32_t width, int32_t height, uint16_t color) {
+}
+void gfx2d_roundRect(int32_t x, int32_t y, int32_t width, int32_t height, uint32_t r, uint16_t color) {
+}
 void gfx2d_circle(int32_t x, int32_t y, uint32_t r, uint16_t color) {
 }
-
+void gfx2d_polygon(gfxPoint *points, uint32_t pointCount, uint16_t color) {
+}
+void gfx2d_ellipse(int32_t Xpos, int32_t Ypos, uint32_t XRadius, uint32_t YRadius, uint16_t color) {
+}
+void gfx2d_fillTriangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t x2, int32_t y2, uint16_t color) {
+}
+void gfx2d_fillRect(int32_t x, int32_t y, int32_t width, int32_t height, uint16_t color) {
+}
+void gfx2d_fillRoundRect(int32_t x, int32_t y, int32_t width, int32_t height, uint32_t r, uint16_t color) {
+}
 void gfx2d_fillCircle(int32_t x, int32_t y, uint32_t r, uint16_t color) {
+}
+void gfx2d_fillPolygon(gfxPoint *points, uint32_t pointCount, uint16_t color) {
+}
+void gfx2d_fillEllipse(int32_t Xpos, int32_t Ypos, uint32_t XRadius, uint32_t YRadius, uint16_t color) {
 }
