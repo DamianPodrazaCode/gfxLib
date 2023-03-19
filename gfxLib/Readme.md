@@ -1,1 +1,1 @@
-## Biblioteka gfx, testy na nucleoF207 w CUBE.
+## Biblioteka gfx, testy na nucleoF207 w CUBE i na ILI9341 FSMC16bit
