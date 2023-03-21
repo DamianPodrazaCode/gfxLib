@@ -3,6 +3,7 @@
 
 void gfx2d_line(int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint16_t color) {
 
+	//567
 	if (ABS(y1 - y0) > ABS(x1 - x0)) {
 		// rysowanie po osi Y
 		if (y0 > y1) {
@@ -54,7 +55,9 @@ void gfx2d_line(int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint16_t color) 
 			}
 		} while (x0 <= x1);
 	}
-//	// zmienne pomocnicze
+
+// 581
+// zmienne pomocnicze
 //	int d, dx, dy, ai, bi, xi, yi;
 //	int x = x0, y = y0;
 //	// ustalenie kierunku rysowania
@@ -74,7 +77,6 @@ void gfx2d_line(int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint16_t color) 
 //		dy = y0 - y1;
 //	}
 //	// pierwszy piksel
-//	//glVertex2i(x, y);
 //	drawPixel(x, y, color);
 //	// oś wiodąca OX
 //	if (dx > dy) {
@@ -92,7 +94,6 @@ void gfx2d_line(int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint16_t color) 
 //				d += bi;
 //				x += xi;
 //			}
-//			//glVertex2i(x, y);
 //			drawPixel(x, y, color);
 //		}
 //	}
@@ -112,11 +113,11 @@ void gfx2d_line(int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint16_t color) 
 //				d += bi;
 //				y += yi;
 //			}
-//			//glVertex2i(x, y);
 //			drawPixel(x, y, color);
 //		}
 //	}
 
+	//583
 //	int32_t steep = ABS(y1 - y0) > ABS(x1 - x0);
 //	if (steep > 0) {
 //		SWAP(x0, y0);
@@ -154,6 +155,7 @@ void gfx2d_line(int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint16_t color) 
 //		}
 //	}
 
+	//609
 //	int32_t xinc1 = 0, xinc2 = 0, yinc1 = 0, yinc2 = 0, den = 0, num = 0, numadd = 0, numpixels = 0;
 //	int32_t deltax = ABS(x1 - x0);
 //	int32_t deltay = ABS(y1 - y0);
