@@ -58,7 +58,6 @@ void gfx2d_line(int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint16_t color) 
 			}
 		} while (y != y1);
 	}
-
 }
 
 void gfx2d_triangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t x2, int32_t y2, uint16_t color) {
