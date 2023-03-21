@@ -26,7 +26,7 @@ typedef struct {
 
 extern lcdPropertiesTypeDef lcdProp;
 
-void ili9341_init(lcdOrient orientation);
+void drv_init(lcdOrient orientation);
 
 void clearScr(uint16_t color);
 void drawPixel(int32_t x, int32_t y, uint16_t color);

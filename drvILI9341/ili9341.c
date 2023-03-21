@@ -55,7 +55,7 @@ static inline void lcdSetOrient(lcdOrient orientation) {
 	lcdSetWindow(0, 0, lcdProp.width - 1, lcdProp.height - 1);
 }
 
-void ili9341_init(lcdOrient orientation) {
+void drv_init(lcdOrient orientation) {
 	initExtraHardware();
 	lcdBlOff(); // wyłączenie podświetlenia
 	lcdDelayMs(1); // HW reset

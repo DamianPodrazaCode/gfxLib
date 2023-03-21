@@ -6,7 +6,10 @@
 //#include <math.h>
 
 #define ABS(X)                 ((X) > 0 ? (X) : -(X))
-#define SWAP(a, b) 			   { int32_t t = a; a = b; b = t; }
+#define SWAP(a, b) 		{ int32_t t = a; a = b; b = t; }
+//#define SWAP(a, b) 		{ a ^= b; b ^= a; a ^= b;}
+//#define SWAP(a, b) 		{ a -= b; b += a; a = b - a; }
+#define SGN(x)			(x > 0) ? 1 : ((x < 0) ? -1 : 0)
 
 #ifndef __weak
 #define __weak   __attribute__((weak))

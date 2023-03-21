@@ -1,42 +1,158 @@
 #include "gfx.h"
+#include <math.h>
 
 void gfx2d_line(int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint16_t color) {
 
-	int32_t steep = ABS(y1 - y0) > ABS(x1 - x0);
-	if (steep > 0) {
-		SWAP(x0, y0);
-		SWAP(x1, y1);
-	}
-
-	if (x0 > x1) {
-		SWAP(x0, x1);
-		SWAP(y0, y1);
-	}
-
-	int32_t dx = x1 - x0;
-	int32_t dy = ABS(y1 - y0);
-	int32_t err = dx / 2;
-	int32_t ystep = (y0 < y1) ? 1 : -1;
-
-	if (steep) {
-		for (; x0 <= x1; x0++) {
-			drawPixel(y0, x0, color);
-			err -= dy;
-			if (err < 0) {
-				y0 += ystep;
-				err += dx;
-			}
+	if (ABS(y1 - y0) > ABS(x1 - x0)) {
+		// rysowanie po osi Y
+		if (y0 > y1) {
+			SWAP(x0, x1);
+			SWAP(y0, y1);
 		}
-	} else {
-		for (; x0 <= x1; x0++) {
+		int dx = x1 - x0;
+		int dy = y1 - y0;
+		register int xx = dx > 0 ? 1 : -1;
+		dx = ABS(dx);
+		register int a = dx + dx;
+		register int b = a - (dy + dy);
+		register int pd = a - dy;
+
+		do {
 			drawPixel(x0, y0, color);
-			err -= dy;
-			if (err < 0) {
-				y0 += ystep;
-				err += dx;
+			if (pd < 0) {
+				y0++;
+				pd = pd + a;
+			} else {
+				y0++;
+				x0 = x0 + xx;
+				pd = pd + b;
 			}
+		} while (y0 <= y1);
+	} else {
+		// rysowanie po osi X
+		if (x0 > x1) {
+			SWAP(x0, x1);
+			SWAP(y0, y1);
 		}
+		int dx = x1 - x0;
+		int dy = y1 - y0;
+		register int yy = dy > 0 ? 1 : -1;
+		dy = ABS(dy);
+		register int a = dy + dy;
+		register int b = a - (dx + dx);
+		register int pd = a - dx;
+
+		do {
+			drawPixel(x0, y0, color);
+			if (pd < 0) {
+				x0++;
+				pd = pd + a;
+			} else {
+				x0++;
+				y0 = y0 + yy;
+				pd = pd + b;
+			}
+		} while (x0 <= x1);
 	}
+//	// zmienne pomocnicze
+//	int d, dx, dy, ai, bi, xi, yi;
+//	int x = x0, y = y0;
+//	// ustalenie kierunku rysowania
+//	if (x0 < x1) {
+//		xi = 1;
+//		dx = x1 - x0;
+//	} else {
+//		xi = -1;
+//		dx = x0 - x1;
+//	}
+//	// ustalenie kierunku rysowania
+//	if (y0 < y1) {
+//		yi = 1;
+//		dy = y1 - y0;
+//	} else {
+//		yi = -1;
+//		dy = y0 - y1;
+//	}
+//	// pierwszy piksel
+//	//glVertex2i(x, y);
+//	drawPixel(x, y, color);
+//	// oś wiodąca OX
+//	if (dx > dy) {
+//		ai = (dy - dx) * 2;
+//		bi = dy * 2;
+//		d = bi - dx;
+//		// pętla po kolejnych x
+//		while (x != x1) {
+//			// test współczynnika
+//			if (d >= 0) {
+//				x += xi;
+//				y += yi;
+//				d += ai;
+//			} else {
+//				d += bi;
+//				x += xi;
+//			}
+//			//glVertex2i(x, y);
+//			drawPixel(x, y, color);
+//		}
+//	}
+//	// oś wiodąca OY
+//	else {
+//		ai = (dx - dy) * 2;
+//		bi = dx * 2;
+//		d = bi - dy;
+//		// pętla po kolejnych y
+//		while (y != y1) {
+//			// test współczynnika
+//			if (d >= 0) {
+//				x += xi;
+//				y += yi;
+//				d += ai;
+//			} else {
+//				d += bi;
+//				y += yi;
+//			}
+//			//glVertex2i(x, y);
+//			drawPixel(x, y, color);
+//		}
+//	}
+
+//	int32_t steep = ABS(y1 - y0) > ABS(x1 - x0);
+//	if (steep > 0) {
+//		SWAP(x0, y0);
+//		SWAP(x1, y1);
+//	}
+//
+//	// zamiana rysowania w x, zawsze rysujemy od lewej do prawej
+//	if (x0 > x1) {
+//		SWAP(x0, x1);
+//		SWAP(y0, y1);
+//	}
+//
+//	int32_t dx = x1 - x0;  // długość w osi x, abs niepotrzebny bo wcześnie zrobiona zamiana
+//	int32_t dy = ABS(y1 - y0); // długość w osi y
+//	int32_t err = dx / 2;
+//	int32_t ystep = (y0 < y1) ? 1 : -1;
+//
+//	if (steep) {
+//		for (; x0 <= x1; x0++) {
+//			drawPixel(y0, x0, color);
+//			err -= dy;
+//			if (err < 0) {
+//				y0 += ystep;
+//				err += dx;
+//			}
+//		}
+//	} else {
+//		for (; x0 <= x1; x0++) {
+//			drawPixel(x0, y0, color);
+//			err -= dy;
+//			if (err < 0) {
+//				y0 += ystep;
+//				err += dx;
+//			}
+//		}
+//	}
 
 //	int32_t xinc1 = 0, xinc2 = 0, yinc1 = 0, yinc2 = 0, den = 0, num = 0, numadd = 0, numpixels = 0;
 //	int32_t deltax = ABS(x1 - x0);
@@ -203,8 +319,7 @@ void gfx2d_fillTriangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t 
 			break;
 
 	}
-	next:
-	dx1 = x2 - x1;
+	next: dx1 = x2 - x1;
 	if (dx1 < 0) {
 		dx1 = -dx1;
 		signx1 = -1;
@@ -238,8 +353,7 @@ void gfx2d_fillTriangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t 
 				if (changed1) {
 					t1xp = signx1;
 					break;
-				}
-				else
+				} else
 					goto next3;
 			}
 			if (changed1)
@@ -249,8 +363,7 @@ void gfx2d_fillTriangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t 
 			if (j < dx1)
 				j++;
 		}
-		next3:
-		while (t2x != x2) {
+		next3: while (t2x != x2) {
 			e2 += dy2;
 			while (e2 >= dx2) {
 				e2 -= dx2;
