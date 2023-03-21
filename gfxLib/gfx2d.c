@@ -3,63 +3,97 @@
 
 void gfx2d_line(int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint16_t color) {
 
-	//567
+	// Algorytmy rasteryzacji lini, algorytm Bresenhama
+	// https://gakko.pjwstk.edu.pl/materialy/1927/lec/wyklad-4.html#odcinki
+	//554
+
 	if (ABS(y1 - y0) > ABS(x1 - x0)) {
 		// rysowanie po osi Y
-		if (y0 > y1) {
+		if (y0 > y1) { // ustawienie rysowania zawsze od góry do dołu
 			SWAP(x0, x1);
 			SWAP(y0, y1);
 		}
-		int dx = x1 - x0;
-		int dy = y1 - y0;
-		register int xx = dx > 0 ? 1 : -1;
+		int dx = x1 - x0; // długość w osi X
+		int dy = y1 - y0; // długość w osi Y
+		register int xx = dx > 0 ? 1 : -1;  //ustalenie rysowania - prawo, lewo
 		dx = ABS(dx);
-		register int a = dx + dx;
-		register int b = a - (dy + dy);
-		register int pd = a - dy;
-
-		do {
-			drawPixel(x0, y0, color);
-			if (pd < 0) {
-				y0++;
-				pd = pd + a;
-			} else {
-				y0++;
-				x0 = x0 + xx;
-				pd = pd + b;
-			}
-		} while (y0 <= y1);
+		register int a = dx + dx; // zmienna pomocnicza a
+		register int b = a - (dy + dy); // zmienna pomocnicza b
+		register int pd = a - dy; // parametr decyzyjny
+		register int x = x0; // przepisanie z ramu do rejestru, szybsze działanie pętli rysującej
+		register int y = y0;
+		if (xx > 0) { // rysowanie w prawo
+			do {
+				drawPixel(x, y, color);
+				if (pd < 0) {
+					y++;
+					pd = pd + a;
+				} else {
+					y++;
+					x++;
+					pd = pd + b;
+				}
+			} while (y <= y1);
+		} else { // rysowanie w lewo
+			do {
+				drawPixel(x, y, color);
+				if (pd < 0) {
+					y++;
+					pd = pd + a;
+				} else {
+					y++;
+					x--;
+					pd = pd + b;
+				}
+			} while (y <= y1);
+		}
 	} else {
 		// rysowanie po osi X
-		if (x0 > x1) {
+		if (x0 > x1) { // ustawienie rysowania zawsze od lewej do prawej
 			SWAP(x0, x1);
 			SWAP(y0, y1);
 		}
-		int dx = x1 - x0;
-		int dy = y1 - y0;
-		register int yy = dy > 0 ? 1 : -1;
+		int dx = x1 - x0; // długość w osi X
+		int dy = y1 - y0; // długość w osi Y
+		register int yy = dy > 0 ? 1 : -1;  //ustalenie rysowania - góra, dół
 		dy = ABS(dy);
-		register int a = dy + dy;
-		register int b = a - (dx + dx);
-		register int pd = a - dx;
-
+		register int a = dy + dy; // zmienna pomocnicza a
+		register int b = a - (dx + dx); // zmienna pomocnicza b
+		register int pd = a - dx; // parametr decyzyjny
+		register int x = x0; // przepisanie z ramu do rejestru, szybsze działanie pętli rysującej
+		register int y = y0;
+		if (yy > 0) { // rysowanie w górę
 		do {
-			drawPixel(x0, y0, color);
+			drawPixel(x, y, color);
 			if (pd < 0) {
-				x0++;
+				x++;
 				pd = pd + a;
 			} else {
-				x0++;
-				y0 = y0 + yy;
+				x++;
+				y++;
 				pd = pd + b;
 			}
-		} while (x0 <= x1);
+		} while (x <= x1);
+		} else {  // rysowanie w dół
+			do {
+				drawPixel(x, y, color);
+				if (pd < 0) {
+					x++;
+					pd = pd + a;
+				} else {
+					x++;
+					y--;
+					pd = pd + b;
+				}
+			} while (x <= x1);
+		}
 	}
 
-// 581
-// zmienne pomocnicze
-//	int d, dx, dy, ai, bi, xi, yi;
-//	int x = x0, y = y0;
+// 554
+//// zmienne pomocnicze
+//	int dx, dy;
+//	register int d, ai, bi, xi, yi;
+//	register int x = x0, y = y0;
 //	// ustalenie kierunku rysowania
 //	if (x0 < x1) {
 //		xi = 1;
@@ -117,7 +151,7 @@ void gfx2d_line(int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint16_t color) 
 //		}
 //	}
 
-	//583
+//555
 //	int32_t steep = ABS(y1 - y0) > ABS(x1 - x0);
 //	if (steep > 0) {
 //		SWAP(x0, y0);
@@ -130,32 +164,33 @@ void gfx2d_line(int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint16_t color) 
 //		SWAP(y0, y1);
 //	}
 //
-//	int32_t dx = x1 - x0;  // długość w osi x, abs niepotrzebny bo wcześnie zrobiona zamiana
-//	int32_t dy = ABS(y1 - y0); // długość w osi y
-//	int32_t err = dx / 2;
-//	int32_t ystep = (y0 < y1) ? 1 : -1;
+//	register int32_t dx = x1 - x0;  // długość w osi x, abs niepotrzebny bo wcześnie zrobiona zamiana
+//	register int32_t dy = ABS(y1 - y0); // długość w osi y
+//	register int32_t err = dx / 2;
+//	register int32_t ystep = (y0 < y1) ? 1 : -1;
+//	register int x = x0, y = y0;
 //
 //	if (steep) {
-//		for (; x0 <= x1; x0++) {
-//			drawPixel(y0, x0, color);
+//		for (; x <= x1; x++) {
+//			drawPixel(y, x, color);
 //			err -= dy;
 //			if (err < 0) {
-//				y0 += ystep;
+//				y += ystep;
 //				err += dx;
 //			}
 //		}
 //	} else {
-//		for (; x0 <= x1; x0++) {
-//			drawPixel(x0, y0, color);
+//		for (; x <= x1; x++) {
+//			drawPixel(x, y, color);
 //			err -= dy;
 //			if (err < 0) {
-//				y0 += ystep;
+//				y += ystep;
 //				err += dx;
 //			}
 //		}
 //	}
 
-	//609
+//609
 //	int32_t xinc1 = 0, xinc2 = 0, yinc1 = 0, yinc2 = 0, den = 0, num = 0, numadd = 0, numpixels = 0;
 //	int32_t deltax = ABS(x1 - x0);
 //	int32_t deltay = ABS(y1 - y0);
