@@ -145,23 +145,17 @@ void gfx2d_fillTriangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t 
 	lineInit(&line1, &x0, &y0, &x1, &y1);
 	lineInit(&line2, &x0, &y0, &x2, &y2);
 
-	for (int i = y0; i < y1; i++) {
-//		drawPixel(line1.x, line1.y, color);
-//		drawPixel(line2.x, line2.y, color);
-		drawHLine(line1.x, line2.x, line1.y, color);
-		lineStep(&line1);
-		lineStep(&line2);
-	}
-
-	lineInit(&line3, &x1, &y1, &x2, &y2);
-
-	for (int i = y1; i < y2; i++) {
-//		drawPixel(line2.x, line2.y, color);
-//		drawPixel(line3.x, line3.y, color);
-		drawHLine(line3.x, line2.x, line3.y, color);
-		lineStep(&line2);
-		lineStep(&line3);
-	}
+		for (int i = y0; i < y1; i++) {
+			drawHLine(line1.x, line2.x, line2.y, color);
+			lineStep(&line1);
+			lineStep(&line2);
+		}
+		lineInit(&line3, &x1, &y1, &x2, &y2);
+		for (int i = y1; i < y2; i++) {
+			drawHLine(line3.x, line2.x, line2.y, color);
+			lineStep(&line2);
+			lineStep(&line3);
+		}
 
 //	int16_t t1x, t2x, y, minx, maxx, t1xp, t2xp;
 //	uint8_t changed1 = 0;

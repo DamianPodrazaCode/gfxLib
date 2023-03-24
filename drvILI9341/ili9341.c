@@ -86,18 +86,18 @@ inline void drawPixel(int32_t x, int32_t y, uint16_t color) {
 }
 
 inline void drawHLine(int32_t x1, int32_t x2, int32_t y, uint16_t color) {
-	lcdSetWindow(x1, y, x2, y);
 	if (x1 > x2)
 		swap(x1, x2);
-	for (uint16_t i = x1; i < x2; i++)
+	lcdSetWindow(x1, y, x2, y);
+	for (int16_t i = x1; i < x2; i++)
 		writeDATA(color);
 }
 
 inline void drawVLine(int32_t x, int32_t y1, int32_t y2, uint16_t color) {
-	lcdSetWindow(x, y1, x, y2);
 	if (y1 > y2)
 		swap(y1, y2);
-	for (uint16_t i = y1; i < y2; i++)
+	lcdSetWindow(x, y1, x, y2);
+	for (int16_t i = y1; i < y2; i++)
 		writeDATA(color);
 }
 
