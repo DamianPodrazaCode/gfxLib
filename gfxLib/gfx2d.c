@@ -123,10 +123,17 @@ void gfx2d_fillTriangle(gfx2dPoint_t A, gfx2dPoint_t B, gfx2dPoint_t C, uint16_t
 	}
 }
 
-
 void gfx2d_rect(gfx2dPoint_t A, gfx2dSize_t size, uint16_t color) {
+	drawHLine(A.x, A.x + size.w, A.y, color);
+	drawHLine(A.x, A.x + size.w, A.y + size.h, color);
+	drawVLine(A.x, A.y, A.y + size.h, color);
+	drawVLine(A.x + size.w, A.y, A.y + size.h, color);
 }
+
 void gfx2d_fillRect(gfx2dPoint_t A, gfx2dSize_t size, uint16_t color) {
+	int32_t Bx = A.x + size.w;
+	for (int i = 0; i < size.h; i++)
+		drawHLine(A.x, Bx, A.y + i, color);
 }
 
 void gfx2d_roundRect(gfx2dPoint_t A, gfx2dSize_t size, uint32_t radius, uint16_t color) {
