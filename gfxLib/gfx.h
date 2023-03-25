@@ -19,14 +19,19 @@
 typedef struct {
 	int width;
 	int height;
-} gfxPropertiesTypeDef;
+} gfxScreenProperties_t;
 
 typedef struct {
-	int32_t X;
-	int32_t Y;
-} gfxPoint;
+	int32_t x;
+	int32_t y;
+} gfx2dPoint_t;
 
-extern gfxPropertiesTypeDef gfxProp;
+typedef struct {
+	int32_t w; //szerokość
+	int32_t h; //wysokość
+} gfx2dSize_t;
+
+extern gfxScreenProperties_t gfxProp;
 
 void gfx_init(int screenX, int screenY);
 
@@ -38,19 +43,25 @@ __weak void drawVLine(int32_t x, int32_t y1, int32_t y2, uint16_t color);
 __weak void copyBuffer(uint16_t *buffer, int32_t x, int32_t y, uint32_t heigh, uint32_t width);
 
 // rysowanie w 2d, definicje funkcji znajdują sie w gfx2d.c
-void gfx2d_line(int32_t x0, int32_t y0, int32_t x1, int32_t y1, uint16_t color);
-void gfx2d_triangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t x2, int32_t y2, uint16_t color);
-void gfx2d_rect(int32_t x, int32_t y, int32_t width, int32_t height, uint16_t color);
-void gfx2d_roundRect(int32_t x, int32_t y, int32_t width, int32_t height, uint32_t r, uint16_t color);
-void gfx2d_circle(int32_t x, int32_t y, uint32_t r, uint16_t color);
-void gfx2d_polygon(gfxPoint *points, uint32_t pointCount, uint16_t color);
-void gfx2d_ellipse(int32_t Xpos, int32_t Ypos, uint32_t XRadius, uint32_t YRadius, uint16_t color);
-void gfx2d_fillTriangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t x2, int32_t y2, uint16_t color);
-void gfx2d_fillRect(int32_t x, int32_t y, int32_t width, int32_t height, uint16_t color);
-void gfx2d_fillRoundRect(int32_t x, int32_t y, int32_t width, int32_t height, uint32_t r, uint16_t color);
-void gfx2d_fillCircle(int32_t x, int32_t y, uint32_t r, uint16_t color);
-void gfx2d_fillPolygon(gfxPoint *points, uint32_t pointCount, uint16_t color);
-void gfx2d_fillEllipse(int32_t Xpos, int32_t Ypos, uint32_t XRadius, uint32_t YRadius, uint16_t color);
+void gfx2d_line(gfx2dPoint_t A, gfx2dPoint_t B, uint16_t color);
+
+void gfx2d_triangle(gfx2dPoint_t A, gfx2dPoint_t B, gfx2dPoint_t C, uint16_t color);
+void gfx2d_fillTriangle(gfx2dPoint_t A, gfx2dPoint_t B, gfx2dPoint_t C, uint16_t color);
+
+void gfx2d_rect(gfx2dPoint_t A, gfx2dSize_t size, uint16_t color);
+void gfx2d_fillRect(gfx2dPoint_t A, gfx2dSize_t size, uint16_t color);
+
+void gfx2d_roundRect(gfx2dPoint_t A, gfx2dSize_t size, uint32_t radius, uint16_t color);
+void gfx2d_fillRoundRect(gfx2dPoint_t A, gfx2dSize_t size, uint32_t radius, uint16_t color);
+
+void gfx2d_circle(gfx2dPoint_t A, uint32_t radius, uint16_t color);
+void gfx2d_fillCircle(gfx2dPoint_t A, uint32_t radius, uint16_t color);
+
+void gfx2d_ellipse(gfx2dPoint_t A, gfx2dSize_t size, uint16_t color);
+void gfx2d_fillEllipse(gfx2dPoint_t A, gfx2dSize_t size, uint16_t color);
+
+void gfx2d_polygon(gfx2dPoint_t *pPoint, uint32_t pointCount, uint16_t color);
+void gfx2d_fillPolygon(gfx2dPoint_t *pPoint, uint32_t pointCount, uint16_t color);
 
 // rysowanie w 3d, definicje funkcji znajdują sie w gfx3d.c
 

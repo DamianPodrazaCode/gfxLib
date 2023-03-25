@@ -1,10 +1,10 @@
 #include "gfx.h"
 
-gfxPropertiesTypeDef gfxProp;
+gfxScreenProperties_t gfxSreenProp;
 
 void gfx_init(int screenX, int screenY) {
-	gfxProp.width = screenX;
-	gfxProp.height = screenY;
+	gfxSreenProp.width = screenX;
+	gfxSreenProp.height = screenY;
 }
 
 // funkcje podstawowe definiowane na zewnątrz
@@ -27,5 +27,4 @@ __weak void drawVLine(int32_t x, int32_t y1, int32_t y2, uint16_t color) {
 __weak void copyBuffer(uint16_t *buffer, int32_t x, int32_t y, uint32_t heigh, uint32_t width) {
 	// kopiowanie fragmentu pamięcia na ekran
 }
-
 
