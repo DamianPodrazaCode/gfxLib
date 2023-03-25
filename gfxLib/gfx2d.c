@@ -5,11 +5,11 @@ void gfx2d_line(gfx2dPoint_t A, gfx2dPoint_t B, uint16_t color) {
 
 	register int x = A.x;
 	register int y = A.y;
-	register int e = 0;
 	register int kx = (x <= B.x) ? 1 : -1;
 	register int ky = (y <= B.y) ? 1 : -1;
 	register int dx = ABS(B.x - x);
 	register int dy = ABS(B.y - y);
+	register int e;
 
 	if (dx >= dy) {
 		e = dx >> 1;
