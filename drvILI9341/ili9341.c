@@ -88,13 +88,13 @@ inline void drawPixel(int32_t x, int32_t y, uint16_t color) {
 }
 
 inline void drawHLine(int32_t x1, int32_t x2, int32_t y, uint16_t color) {
-	if ((x1 > lcdProp.width) && (x2 > lcdProp.width)) //jeżeli linia po za ekranem z prawej strony to nie rysuj w ogóle
+	if ((x1 > lcdProp.width - 1) && (x2 > lcdProp.width - 1)) //jeżeli linia po za ekranem z prawej strony to nie rysuj w ogóle
 		return;
 	if ((x1 < 0) && (x2 < 0)) //jeżeli linia po za ekranem z lewej strony to nie rysuj w ogóle
 		return;
 	if (x1 > x2) // sortowanie stron
 		swap(x1, x2);
-	if (x2 > lcdProp.width)
+	if (x2 > lcdProp.width - 1)
 		x2 = lcdProp.width - 1;
 	if (x1 < 0)
 		x1 = 0;

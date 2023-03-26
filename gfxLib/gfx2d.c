@@ -144,10 +144,8 @@ void gfx2d_fillRoundRect(gfx2dPoint_t A, gfx2dSize_t size, uint32_t radius, uint
 }
 
 void gfx2d_circle(gfx2dPoint_t A, uint32_t radius, uint16_t color) {
-
 	int32_t x = 0, y = radius;
 	int32_t e = 0, e1, e2;
-
 	while (x <= y) {
 		drawPixel(x + A.x, y + A.y, color);
 		drawPixel(y + A.x, -x + A.y, color);
@@ -169,10 +167,28 @@ void gfx2d_circle(gfx2dPoint_t A, uint32_t radius, uint16_t color) {
 }
 
 void gfx2d_fillCircle(gfx2dPoint_t A, uint32_t radius, uint16_t color) {
+	int32_t x = 0, y = radius;
+	int32_t e = 0, e1, e2;
+	while (x <= y) {
+		drawHLine(-y + A.x, y + A.x, x + A.y, color);
+		drawHLine(-y + A.x, y + A.x, -x + A.y, color);
+		e1 = e + (x << 1) + 1;
+		e2 = e1 - (y << 1) + 1;
+		if (e1 + e2 >= 0) {
+			drawHLine(-x + A.x, x + A.x, y + A.y, color);
+			drawHLine(-x + A.x, x + A.x, -y + A.y, color);
+			y--;
+			e = e2;
+		} else
+			e = e1;
+		x++;
+	}
 }
 
 void gfx2d_ellipse(gfx2dPoint_t A, gfx2dSize_t size, uint16_t color) {
+
 }
+
 void gfx2d_fillEllipse(gfx2dPoint_t A, gfx2dSize_t size, uint16_t color) {
 }
 
