@@ -11,6 +11,8 @@
 //#define SWAP(a, b) 		{ a ^= b; b ^= a; a ^= b;}
 //#define SWAP(a, b) 		{ a -= b; b += a; a = b - a; }
 #define SGN(x)			(x > 0) ? 1 : ((x < 0) ? -1 : 0)
+#define MIN(a,b) 		(((a)<(b))?(a):(b))
+#define MAX(a,b) 		(((a)>(b))?(a):(b))
 
 #ifndef __weak
 #define __weak   __attribute__((weak))

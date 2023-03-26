@@ -106,8 +106,16 @@ inline void drawHLine(int32_t x1, int32_t x2, int32_t y, uint16_t color) {
 }
 
 inline void drawVLine(int32_t x, int32_t y1, int32_t y2, uint16_t color) {
+	if ((y1 > lcdProp.height - 1) && (y2 > lcdProp.height - 1)) //jeżeli linia po za ekranem z dolnej strony to nie rysuj w ogóle
+		return;
+	if ((y1 < 0) && (y2 < 0)) //jeżeli linia po za ekranem z górnej strony to nie rysuj w ogóle
+		return;
 	if (y1 > y2)
 		swap(y1, y2);
+	if (y2 > lcdProp.height - 1)
+		y2 = lcdProp.height - 1;
+	if (y1 < 0)
+		y1 = 0;
 	lcdSetWindow(x, y1, x, y2);
 	for (int16_t i = y1; i < y2; i++)
 		writeDATA(color);

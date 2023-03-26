@@ -138,9 +138,113 @@ void gfx2d_fillRect(gfx2dPoint_t A, gfx2dSize_t size, uint16_t color) {
 		drawHLine(A.x, Bx, A.y + i, color);
 }
 
-void gfx2d_roundRect(gfx2dPoint_t A, gfx2dSize_t size, uint32_t radius, uint16_t color) {
+static inline void roundHelper(gfx2dPoint_t A, uint32_t radius, uint32_t side, uint16_t color) {
+	int32_t x = 0, y = radius;
+	int32_t e = 0, e1, e2;
+	while (x <= y) {
+		if (side == 0) {
+			drawPixel(-x + A.x, -y + A.y, color);
+			drawPixel(-y + A.x, -x + A.y, color);
+		}
+		if (side == 1) {
+			drawPixel(y + A.x, -x + A.y, color);
+			drawPixel(x + A.x, -y + A.y, color);
+		}
+		if (side == 2) {
+			drawPixel(x + A.x, y + A.y, color);
+			drawPixel(y + A.x, x + A.y, color);
+		}
+		if (side == 3) {
+			drawPixel(-y + A.x, x + A.y, color);
+			drawPixel(-x + A.x, y + A.y, color);
+		}
+		e1 = e + (x << 1) + 1;
+		e2 = e1 - (y << 1) + 1;
+		x++;
+		if (e1 + e2 >= 0) {
+			e = e2;
+			y--;
+		} else
+			e = e1;
+	}
 }
+
+void gfx2d_roundRect(gfx2dPoint_t A, gfx2dSize_t size, uint32_t radius, uint16_t color) {
+	drawHLine(A.x + radius, A.x + size.w - radius, A.y, color);
+	drawHLine(A.x + radius, A.x + size.w - radius, A.y + size.h, color);
+	drawVLine(A.x, A.y + radius, A.y + size.h - radius, color);
+	drawVLine(A.x + size.w, A.y + radius, A.y + size.h - radius, color);
+	gfx2dPoint_t roundPoint;
+	roundPoint.x = A.x + radius;
+	roundPoint.y = A.y + radius;
+	roundHelper(roundPoint, radius, 0, color);
+	roundPoint.x = A.x + size.w - radius;
+	roundPoint.y = A.y + radius;
+	roundHelper(roundPoint, radius, 1, color);
+	roundPoint.x = A.x + size.w - radius;
+	roundPoint.y = A.y + size.h - radius;
+	roundHelper(roundPoint, radius, 2, color);
+	roundPoint.x = A.x + radius;
+	roundPoint.y = A.y + size.h - radius;
+	roundHelper(roundPoint, radius, 3, color);
+}
+
+static inline void fillRoundHelper(gfx2dPoint_t A, uint32_t radius, uint32_t side, uint16_t color) {
+	int32_t x = 0, y = radius;
+	int32_t e = 0, e1, e2;
+	while (x <= y) {
+		if ((side == 2) || (side == 3))
+			drawHLine(-y + A.x, y + A.x, x + A.y, color);
+		if ((side == 0) || (side == 1))
+			drawHLine(-y + A.x, y + A.x, -x + A.y, color);
+		e1 = e + (x << 1) + 1;
+		e2 = e1 - (y << 1) + 1;
+		if (e1 + e2 >= 0) {
+			if ((side == 2) || (side == 3))
+				drawHLine(-x + A.x, x + A.x, y + A.y, color);
+			if ((side == 0) || (side == 1))
+				drawHLine(-x + A.x, x + A.x, -y + A.y, color);
+			y--;
+			e = e2;
+		} else
+			e = e1;
+		x++;
+	}
+}
+
 void gfx2d_fillRoundRect(gfx2dPoint_t A, gfx2dSize_t size, uint32_t radius, uint16_t color) {
+	gfx2dSize_t rect1;
+	gfx2dPoint_t A1;
+	rect1.w = size.w - (radius << 1);
+	rect1.h = size.h;
+	A1.x = A.x + radius;
+	A1.y = A.y;
+	gfx2d_fillRect(A1, rect1, color);
+
+	gfx2dSize_t rect23;
+	gfx2dPoint_t A23;
+	rect23.w = radius;
+	rect23.h = size.h - (radius << 1);
+	A23.x = A.x;
+	A23.y = A.y + radius;
+	gfx2d_fillRect(A23, rect23, color);
+	A23.x = A.x + size.w - radius;
+	A23.y = A.y + radius;
+	gfx2d_fillRect(A23, rect23, color);
+
+	gfx2dPoint_t roundPoint;
+	roundPoint.x = A.x + radius;
+	roundPoint.y = A.y + radius;
+	fillRoundHelper(roundPoint, radius, 0, color);
+	roundPoint.x = A.x + size.w - radius;
+	roundPoint.y = A.y + radius;
+	fillRoundHelper(roundPoint, radius, 1, color);
+	roundPoint.x = A.x + size.w - radius;
+	roundPoint.y = A.y + size.h - radius - 1;
+	fillRoundHelper(roundPoint, radius, 2, color);
+	roundPoint.x = A.x + radius;
+	roundPoint.y = A.y + size.h - radius - 1;
+	fillRoundHelper(roundPoint, radius, 3, color);
 }
 
 void gfx2d_circle(gfx2dPoint_t A, uint32_t radius, uint16_t color) {
@@ -271,5 +375,6 @@ void gfx2d_fillEllipse(gfx2dPoint_t A, gfx2dRadius_t R, uint16_t color) {
 
 void gfx2d_polygon(gfx2dPoint_t *pPoint, uint32_t pointCount, uint16_t color) {
 }
+
 void gfx2d_fillPolygon(gfx2dPoint_t *pPoint, uint32_t pointCount, uint16_t color) {
 }
