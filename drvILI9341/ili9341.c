@@ -81,9 +81,9 @@ inline void clearScr(uint16_t color) {
 }
 
 inline void drawPixel(int32_t x, int32_t y, uint16_t color) {
-	if ((x < lcdProp.width) && (y < lcdProp.height)) {
-	lcdSetWindow(x, y, x, y);
-	writeDATA(color);
+	if ((x < lcdProp.width) && (y < lcdProp.height) && (x >= 0) && (y >= 0)) {
+		lcdSetWindow(x, y, x, y);
+		writeDATA(color);
 	}
 }
 
@@ -98,7 +98,7 @@ inline void drawHLine(int32_t x1, int32_t x2, int32_t y, uint16_t color) {
 		x2 = lcdProp.width - 1;
 	if (x1 < 0)
 		x1 = 0;
-	if (y < lcdProp.height) {
+	if ((y < lcdProp.height) && (y >= 0)) {
 		lcdSetWindow(x1, y, x2, y);
 		for (int16_t i = x1; i < x2; i++)
 			writeDATA(color);
