@@ -80,18 +80,24 @@ inline void clearScr(uint16_t color) {
 	}
 }
 
-inline void drawPixel(uint32_t x, uint32_t y, uint16_t color) {
+inline void drawPixel(int32_t x, int32_t y, uint16_t color) {
 	if ((x < lcdProp.width) && (y < lcdProp.height)) {
-		lcdSetWindow(x, y, x, y);
-		writeDATA(color);
+	lcdSetWindow(x, y, x, y);
+	writeDATA(color);
 	}
 }
 
-inline void drawHLine(uint32_t x1, uint32_t x2, uint32_t y, uint16_t color) {
-	if (x1 > x2)
+inline void drawHLine(int32_t x1, int32_t x2, int32_t y, uint16_t color) {
+	if ((x1 > lcdProp.width) && (x2 > lcdProp.width)) //jeżeli linia po za ekranem z prawej strony to nie rysuj w ogóle
+		return;
+	if ((x1 < 0) && (x2 < 0)) //jeżeli linia po za ekranem z lewej strony to nie rysuj w ogóle
+		return;
+	if (x1 > x2) // sortowanie stron
 		swap(x1, x2);
 	if (x2 > lcdProp.width)
 		x2 = lcdProp.width - 1;
+	if (x1 < 0)
+		x1 = 0;
 	if (y < lcdProp.height) {
 		lcdSetWindow(x1, y, x2, y);
 		for (int16_t i = x1; i < x2; i++)
