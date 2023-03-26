@@ -31,6 +31,11 @@ typedef struct {
 	int32_t h; //wysokość
 } gfx2dSize_t;
 
+typedef struct {
+	int32_t rx; //szerokość
+	int32_t ry; //wysokość
+} gfx2dRadius_t;
+
 extern gfxScreenProperties_t gfxProp;
 
 void gfx_init(int screenX, int screenY);
@@ -57,8 +62,8 @@ void gfx2d_fillRoundRect(gfx2dPoint_t A, gfx2dSize_t size, uint32_t radius, uint
 void gfx2d_circle(gfx2dPoint_t A, uint32_t radius, uint16_t color);
 void gfx2d_fillCircle(gfx2dPoint_t A, uint32_t radius, uint16_t color);
 
-void gfx2d_ellipse(gfx2dPoint_t A, gfx2dSize_t size, uint16_t color);
-void gfx2d_fillEllipse(gfx2dPoint_t A, gfx2dSize_t size, uint16_t color);
+void gfx2d_ellipse(gfx2dPoint_t A, gfx2dRadius_t R, uint16_t color);
+void gfx2d_fillEllipse(gfx2dPoint_t A, gfx2dRadius_t R, uint16_t color);
 
 void gfx2d_polygon(gfx2dPoint_t *pPoint, uint32_t pointCount, uint16_t color);
 void gfx2d_fillPolygon(gfx2dPoint_t *pPoint, uint32_t pointCount, uint16_t color);

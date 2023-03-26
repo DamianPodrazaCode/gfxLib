@@ -185,11 +185,51 @@ void gfx2d_fillCircle(gfx2dPoint_t A, uint32_t radius, uint16_t color) {
 	}
 }
 
-void gfx2d_ellipse(gfx2dPoint_t A, gfx2dSize_t size, uint16_t color) {
+void gfx2d_ellipse(gfx2dPoint_t A, gfx2dRadius_t R, uint16_t color) {
+	int32_t x = 0, y = R.ry;
+	int32_t e = 0, e1, e2;
+	int32_t rx2 = R.rx * R.rx;
+	int32_t ry2 = R.ry * R.ry;
+	int32_t fx = 0;
+	int32_t fy = rx2 * R.ry;
+
+	while (fx <= fy) {
+		drawPixel(A.x + x, A.y + y, color);
+		drawPixel(A.x + x, A.y - y, color);
+		drawPixel(A.x - x, A.y + y, color);
+		drawPixel(A.x - x, A.y - y, color);
+		e1 = e + (fx << 1) + ry2;
+		e2 = e1 - (fy << 1) + rx2;
+		x++;
+		fx += ry2;
+		if ((e1 + e2) >= 0) {
+			e = e2;
+			y--;
+			fy -= rx2;
+		} else
+			e = e1;
+	}
+
+	while (y >= 0) {
+		drawPixel(A.x + x, A.y + y, color);
+		drawPixel(A.x + x, A.y - y, color);
+		drawPixel(A.x - x, A.y + y, color);
+		drawPixel(A.x - x, A.y - y, color);
+		e1 = e - (fy << 1) + rx2;
+		e2 = e1 + (fx << 1) + ry2;
+		y--;
+		fy -= rx2;
+		if ((e1 + e2) < 0) {
+			e = e2;
+			x++;
+			fx += ry2;
+		} else
+			e = e1;
+	}
 
 }
 
-void gfx2d_fillEllipse(gfx2dPoint_t A, gfx2dSize_t size, uint16_t color) {
+void gfx2d_fillEllipse(gfx2dPoint_t A, gfx2dRadius_t R, uint16_t color) {
 }
 
 void gfx2d_polygon(gfx2dPoint_t *pPoint, uint32_t pointCount, uint16_t color) {
