@@ -29,8 +29,8 @@ extern lcdPropertiesTypeDef lcdProp;
 void drv_init(lcdOrient orientation);
 
 void clearScr(uint16_t color);
-void drawPixel(int32_t x, int32_t y, uint16_t color);
-void drawHLine(int32_t x1, int32_t x2, int32_t y, uint16_t color);
+void drawPixel(uint32_t x, uint32_t y, uint16_t color);
+void drawHLine(uint32_t x1, uint32_t x2, uint32_t y, uint16_t color);
 void drawVLine(int32_t x, int32_t y1, int32_t y2, uint16_t color);
 void copyBuffer(uint16_t *buffer, int32_t x, int32_t y, uint32_t heigh, uint32_t width);
 

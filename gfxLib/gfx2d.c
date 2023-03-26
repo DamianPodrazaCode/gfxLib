@@ -2,39 +2,41 @@
 #include <math.h>
 
 void gfx2d_line(gfx2dPoint_t A, gfx2dPoint_t B, uint16_t color) {
+	if ((A.x != B.x) && (A.y != B.y)) {
+		register int32_t x = A.x;
+		register int32_t y = A.y;
+		register int32_t kx = (x <= B.x) ? 1 : -1;
+		register int32_t ky = (y <= B.y) ? 1 : -1;
+		register uint32_t dx = ABS(B.x - x);
+		register uint32_t dy = ABS(B.y - y);
+		register int32_t e;
 
-	register int x = A.x;
-	register int y = A.y;
-	register int kx = (x <= B.x) ? 1 : -1;
-	register int ky = (y <= B.y) ? 1 : -1;
-	register int dx = ABS(B.x - x);
-	register int dy = ABS(B.y - y);
-	register int e;
-
-	if (dx >= dy) {
-		e = dx >> 1;
-		do {
-			drawPixel(x, y, color);
-			x = x + kx;
-			e = e - dy;
-			if (e < 0) {
-				y = y + ky;
-				e = e + dx;
-			}
-		} while (x != B.x);
-	} else {
-		e = dy >> 1;
-		do {
-			drawPixel(x, y, color);
-			y = y + ky;
-			e = e - dx;
-			if (e < 0) {
+		if (dx >= dy) {
+			e = dx >> 1;
+			do {
+				drawPixel(x, y, color);
 				x = x + kx;
-				e = e + dy;
-			}
-		} while (y != B.y);
+				e = e - dy;
+				if (e < 0) {
+					y = y + ky;
+					e = e + dx;
+				}
+			} while (x != B.x);
+		} else {
+			e = dy >> 1;
+			do {
+				drawPixel(x, y, color);
+				y = y + ky;
+				e = e - dx;
+				if (e < 0) {
+					x = x + kx;
+					e = e + dy;
+				}
+			} while (y != B.y);
+		}
+	} else {
+		drawPixel(A.x, A.y, color);
 	}
-
 }
 
 void gfx2d_triangle(gfx2dPoint_t A, gfx2dPoint_t B, gfx2dPoint_t C, uint16_t color) {
@@ -142,7 +144,30 @@ void gfx2d_fillRoundRect(gfx2dPoint_t A, gfx2dSize_t size, uint32_t radius, uint
 }
 
 void gfx2d_circle(gfx2dPoint_t A, uint32_t radius, uint16_t color) {
+
+	int32_t x = 0, y = radius;
+	int32_t e = 0, e1, e2;
+
+	while (x <= y) {
+		drawPixel(x + A.x, y + A.y, color);
+		drawPixel(y + A.x, -x + A.y, color);
+		drawPixel(-x + A.x, -y + A.y, color);
+		drawPixel(-y + A.x, x + A.y, color);
+		drawPixel(y + A.x, x + A.y, color);
+		drawPixel(x + A.x, -y + A.y, color);
+		drawPixel(-y + A.x, -x + A.y, color);
+		drawPixel(-x + A.x, y + A.y, color);
+		e1 = e + (x << 1) + 1;
+		e2 = e1 - (y << 1) + 1;
+		x++;
+		if (e1 + e2 >= 0) {
+			e = e2;
+			y--;
+		} else
+			e = e1;
+	}
 }
+
 void gfx2d_fillCircle(gfx2dPoint_t A, uint32_t radius, uint16_t color) {
 }
 

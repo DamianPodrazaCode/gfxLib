@@ -37,8 +37,8 @@ void gfx_init(int screenX, int screenY);
 
 // funkcje podstawowe definiowane na zewnątrz
 __weak void clearScr(uint16_t color);
-__weak void drawPixel(int32_t x, int32_t y, uint16_t color);
-__weak void drawHLine(int32_t x1, int32_t x2, int32_t y, uint16_t color);
+__weak void drawPixel(uint32_t x, uint32_t y, uint16_t color);
+__weak void drawHLine(uint32_t x1, uint32_t x2, uint32_t y, uint16_t color);
 __weak void drawVLine(int32_t x, int32_t y1, int32_t y2, uint16_t color);
 __weak void copyBuffer(uint16_t *buffer, int32_t x, int32_t y, uint32_t heigh, uint32_t width);
 

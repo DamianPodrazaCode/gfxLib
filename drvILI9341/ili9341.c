@@ -80,17 +80,23 @@ inline void clearScr(uint16_t color) {
 	}
 }
 
-inline void drawPixel(int32_t x, int32_t y, uint16_t color) {
-	lcdSetWindow(x, y, x, y);
-	writeDATA(color);
+inline void drawPixel(uint32_t x, uint32_t y, uint16_t color) {
+	if ((x < lcdProp.width) && (y < lcdProp.height)) {
+		lcdSetWindow(x, y, x, y);
+		writeDATA(color);
+	}
 }
 
-inline void drawHLine(int32_t x1, int32_t x2, int32_t y, uint16_t color) {
+inline void drawHLine(uint32_t x1, uint32_t x2, uint32_t y, uint16_t color) {
 	if (x1 > x2)
 		swap(x1, x2);
-	lcdSetWindow(x1, y, x2, y);
-	for (int16_t i = x1; i < x2; i++)
-		writeDATA(color);
+	if (x2 > lcdProp.width)
+		x2 = lcdProp.width - 1;
+	if (y < lcdProp.height) {
+		lcdSetWindow(x1, y, x2, y);
+		for (int16_t i = x1; i < x2; i++)
+			writeDATA(color);
+	}
 }
 
 inline void drawVLine(int32_t x, int32_t y1, int32_t y2, uint16_t color) {
