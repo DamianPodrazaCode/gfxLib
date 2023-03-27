@@ -38,6 +38,8 @@ typedef struct {
 	int32_t ry; //wysokość
 } gfx2dRadius_t;
 
+
+
 extern gfxScreenProperties_t gfxProp;
 
 void gfx_init(int screenX, int screenY);
