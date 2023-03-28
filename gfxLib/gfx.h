@@ -26,6 +26,7 @@ typedef struct {
 typedef struct {
 	int32_t x;
 	int32_t y;
+	uint16_t color;
 } gfx2dPoint_t;
 
 typedef struct {

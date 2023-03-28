@@ -375,7 +375,7 @@ void gfx2d_fillEllipse(gfx2dPoint_t A, gfx2dRadius_t R, uint16_t color) {
 
 void gfx2d_polygon(gfx2dPoint_t *pPoint, uint32_t pointCount, uint16_t color) {
 	for (uint32_t i = 0; i < pointCount - 1; i++) {
-		gfx2d_line(pPoint[i], pPoint[i + 1], color);
+		gfx2d_line(pPoint[i], pPoint[i + 1], pPoint[i].color);
 	}
 	gfx2d_line(pPoint[pointCount - 1], pPoint[0], color);
 }
