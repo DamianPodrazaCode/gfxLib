@@ -1,4 +1,4 @@
-#include "gfx.h"
+#include <gfx.h>
 #include <math.h>
 
 void gfx2d_line(gfx2dPoint_t A, gfx2dPoint_t B, uint16_t color) {
