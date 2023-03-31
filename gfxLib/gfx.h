@@ -5,14 +5,14 @@
 #include <stdbool.h>
 //#include <math.h>
 
-#define ABS(X)                 ((X) > 0 ? (X) : -(X))
-//#define ABS(X)                 {int a=X>>31; X=((X^a)-a);}
-#define SWAP(a, b) 		{ int32_t t = a; a = b; b = t; }
-//#define SWAP(a, b) 		{ a ^= b; b ^= a; a ^= b;}
-//#define SWAP(a, b) 		{ a -= b; b += a; a = b - a; }
-#define SGN(x)			(x > 0) ? 1 : ((x < 0) ? -1 : 0)
-#define MIN(a,b) 		(((a)<(b))?(a):(b))
-#define MAX(a,b) 		(((a)>(b))?(a):(b))
+#define ABS(X)                 ( (X) > 0 ? (X) : -(X) )
+//#define ABS(X)               { int a = X >> 31; X = (( X ^ a ) - a); }
+#define SWAP(a, b) 			   { int32_t t = a; a = b; b = t; }
+//#define SWAP(a, b) 		   { a ^= b; b ^= a; a ^= b; }
+//#define SWAP(a, b) 		   { a -= b; b += a; a = b - a; }
+#define SGN(x)			       ( (x > 0) ? 1 : ( (x < 0) ? -1 : 0) )
+#define MIN(a,b) 		       ( ((a)<(b)) ? (a) : (b) )
+#define MAX(a,b) 		       ( ((a)>(b)) ? (a) : (b) )
 
 #ifndef __weak
 #define __weak   __attribute__((weak))
@@ -38,8 +38,6 @@ typedef struct {
 	int32_t rx; //szerokość
 	int32_t ry; //wysokość
 } gfx2dRadius_t;
-
-
 
 extern gfxScreenProperties_t gfxProp;
 
@@ -69,9 +67,6 @@ void gfx2d_fillCircle(gfx2dPoint_t A, uint32_t radius, uint16_t color);
 
 void gfx2d_ellipse(gfx2dPoint_t A, gfx2dRadius_t R, uint16_t color);
 void gfx2d_fillEllipse(gfx2dPoint_t A, gfx2dRadius_t R, uint16_t color);
-
-void gfx2d_polygon(gfx2dPoint_t *pPoint, uint32_t pointCount, uint16_t color);
-void gfx2d_fillPolygon(gfx2dPoint_t *pPoint, uint32_t pointCount, uint16_t color);
 
 // rysowanie w 3d, definicje funkcji znajdują sie w gfx3d.c
 
