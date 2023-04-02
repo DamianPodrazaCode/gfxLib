@@ -1,7 +1,7 @@
 #include <gfx.h>
 #include <math.h>
 
-void gfx2d_line(gfx2dPoint_t A, gfx2dPoint_t B, uint16_t color) {
+void Gfx::line_2d(gfx2dPoint_t A, gfx2dPoint_t B, uint16_t color) {
 	if ((A.x != B.x) && (A.y != B.y)) {
 		register int32_t x = A.x;
 		register int32_t y = A.y;
@@ -39,23 +39,13 @@ void gfx2d_line(gfx2dPoint_t A, gfx2dPoint_t B, uint16_t color) {
 	}
 }
 
-void gfx2d_triangle(gfx2dPoint_t A, gfx2dPoint_t B, gfx2dPoint_t C, uint16_t color) {
-	gfx2d_line(A, B, color);
-	gfx2d_line(A, C, color);
-	gfx2d_line(C, B, color);
+void Gfx::triangle_2d(gfx2dPoint_t A, gfx2dPoint_t B, gfx2dPoint_t C, uint16_t color) {
+	line_2d(A, B, color);
+	line_2d(A, C, color);
+	line_2d(C, B, color);
 }
 
-typedef struct {
-	int32_t e;
-	int32_t kx;
-	int32_t ky;
-	int32_t dx;
-	int32_t dy;
-	int32_t x;
-	int32_t y;
-} lineComplex_t;
-
-static inline void lineInit(lineComplex_t *pline, gfx2dPoint_t *pA, gfx2dPoint_t *pB) {
+inline void Gfx::lineInit_2d(line2dComplex_t *pline, gfx2dPoint_t *pA, gfx2dPoint_t *pB) {
 	pline->e = 0;
 	pline->kx = (pA->x <= pB->x) ? 1 : -1;
 	pline->ky = (pA->y <= pB->y) ? 1 : -1;
@@ -70,7 +60,7 @@ static inline void lineInit(lineComplex_t *pline, gfx2dPoint_t *pA, gfx2dPoint_t
 		pline->e = pline->dy >> 1;
 }
 
-static inline void lineStep(lineComplex_t *pline) {
+inline void Gfx::lineStep_2d(line2dComplex_t *pline) {
 	if (pline->dx >= pline->dy) {
 		do {
 			pline->x += pline->kx;
@@ -91,7 +81,7 @@ static inline void lineStep(lineComplex_t *pline) {
 	}
 }
 
-void gfx2d_fillTriangle(gfx2dPoint_t A, gfx2dPoint_t B, gfx2dPoint_t C, uint16_t color) {
+void Gfx::fillTriangle_2d(gfx2dPoint_t A, gfx2dPoint_t B, gfx2dPoint_t C, uint16_t color) {
 
 	// sortowanie wierzchołków
 	if (A.y > B.y) {
@@ -107,38 +97,38 @@ void gfx2d_fillTriangle(gfx2dPoint_t A, gfx2dPoint_t B, gfx2dPoint_t C, uint16_t
 		SWAP(B.x, C.x);
 	}
 
-	lineComplex_t line1, line2, line3;
+	line2dComplex_t line1, line2, line3;
 
-	lineInit(&line1, &A, &B);
-	lineInit(&line2, &A, &C);
+	lineInit_2d(&line1, &A, &B);
+	lineInit_2d(&line2, &A, &C);
 
 	for (int i = A.y; i < B.y; i++) {
 		drawHLine(line1.x, line2.x, line2.y, color);
-		lineStep(&line1);
-		lineStep(&line2);
+		lineStep_2d(&line1);
+		lineStep_2d(&line2);
 	}
-	lineInit(&line3, &B, &C);
+	lineInit_2d(&line3, &B, &C);
 	for (int i = B.y; i < C.y; i++) {
 		drawHLine(line3.x, line2.x, line2.y, color);
-		lineStep(&line2);
-		lineStep(&line3);
+		lineStep_2d(&line2);
+		lineStep_2d(&line3);
 	}
 }
 
-void gfx2d_rect(gfx2dPoint_t A, gfx2dSize_t size, uint16_t color) {
+void Gfx::rect_2d(gfx2dPoint_t A, gfx2dSize_t size, uint16_t color) {
 	drawHLine(A.x, A.x + size.w, A.y, color);
 	drawHLine(A.x, A.x + size.w, A.y + size.h, color);
 	drawVLine(A.x, A.y, A.y + size.h, color);
 	drawVLine(A.x + size.w, A.y, A.y + size.h, color);
 }
 
-void gfx2d_fillRect(gfx2dPoint_t A, gfx2dSize_t size, uint16_t color) {
+void Gfx::fillRect_2d(gfx2dPoint_t A, gfx2dSize_t size, uint16_t color) {
 	int32_t Bx = A.x + size.w;
 	for (int i = 0; i < size.h; i++)
 		drawHLine(A.x, Bx, A.y + i, color);
 }
 
-static inline void roundHelper(gfx2dPoint_t A, uint32_t radius, uint32_t side, uint16_t color) {
+inline void Gfx::roundHelper_2d(gfx2dPoint_t A, uint32_t radius, uint32_t side, uint16_t color) {
 	int32_t x = 0, y = radius;
 	int32_t e = 0, e1, e2;
 	while (x <= y) {
@@ -169,7 +159,7 @@ static inline void roundHelper(gfx2dPoint_t A, uint32_t radius, uint32_t side, u
 	}
 }
 
-void gfx2d_roundRect(gfx2dPoint_t A, gfx2dSize_t size, uint32_t radius, uint16_t color) {
+void Gfx::roundRect_2d(gfx2dPoint_t A, gfx2dSize_t size, uint32_t radius, uint16_t color) {
 	drawHLine(A.x + radius, A.x + size.w - radius, A.y, color);
 	drawHLine(A.x + radius, A.x + size.w - radius, A.y + size.h, color);
 	drawVLine(A.x, A.y + radius, A.y + size.h - radius, color);
@@ -177,19 +167,19 @@ void gfx2d_roundRect(gfx2dPoint_t A, gfx2dSize_t size, uint32_t radius, uint16_t
 	gfx2dPoint_t roundPoint;
 	roundPoint.x = A.x + radius;
 	roundPoint.y = A.y + radius;
-	roundHelper(roundPoint, radius, 0, color);
+	roundHelper_2d(roundPoint, radius, 0, color);
 	roundPoint.x = A.x + size.w - radius;
 	roundPoint.y = A.y + radius;
-	roundHelper(roundPoint, radius, 1, color);
+	roundHelper_2d(roundPoint, radius, 1, color);
 	roundPoint.x = A.x + size.w - radius;
 	roundPoint.y = A.y + size.h - radius;
-	roundHelper(roundPoint, radius, 2, color);
+	roundHelper_2d(roundPoint, radius, 2, color);
 	roundPoint.x = A.x + radius;
 	roundPoint.y = A.y + size.h - radius;
-	roundHelper(roundPoint, radius, 3, color);
+	roundHelper_2d(roundPoint, radius, 3, color);
 }
 
-static inline void fillRoundHelper(gfx2dPoint_t A, uint32_t radius, uint32_t side, uint16_t color) {
+inline void Gfx::fillRoundHelper_2d(gfx2dPoint_t A, uint32_t radius, uint32_t side, uint16_t color) {
 	int32_t x = 0, y = radius;
 	int32_t e = 0, e1, e2;
 	while (x <= y) {
@@ -212,14 +202,14 @@ static inline void fillRoundHelper(gfx2dPoint_t A, uint32_t radius, uint32_t sid
 	}
 }
 
-void gfx2d_fillRoundRect(gfx2dPoint_t A, gfx2dSize_t size, uint32_t radius, uint16_t color) {
+void Gfx::fillRoundRect_2d(gfx2dPoint_t A, gfx2dSize_t size, uint32_t radius, uint16_t color) {
 	gfx2dSize_t rect1;
 	gfx2dPoint_t A1;
 	rect1.w = size.w - (radius << 1);
 	rect1.h = size.h;
 	A1.x = A.x + radius;
 	A1.y = A.y;
-	gfx2d_fillRect(A1, rect1, color);
+	fillRect_2d(A1, rect1, color);
 
 	gfx2dSize_t rect23;
 	gfx2dPoint_t A23;
@@ -227,27 +217,27 @@ void gfx2d_fillRoundRect(gfx2dPoint_t A, gfx2dSize_t size, uint32_t radius, uint
 	rect23.h = size.h - (radius << 1);
 	A23.x = A.x;
 	A23.y = A.y + radius;
-	gfx2d_fillRect(A23, rect23, color);
+	fillRect_2d(A23, rect23, color);
 	A23.x = A.x + size.w - radius;
 	A23.y = A.y + radius;
-	gfx2d_fillRect(A23, rect23, color);
+	fillRect_2d(A23, rect23, color);
 
 	gfx2dPoint_t roundPoint;
 	roundPoint.x = A.x + radius;
 	roundPoint.y = A.y + radius;
-	fillRoundHelper(roundPoint, radius, 0, color);
+	fillRoundHelper_2d(roundPoint, radius, 0, color);
 	roundPoint.x = A.x + size.w - radius;
 	roundPoint.y = A.y + radius;
-	fillRoundHelper(roundPoint, radius, 1, color);
+	fillRoundHelper_2d(roundPoint, radius, 1, color);
 	roundPoint.x = A.x + size.w - radius;
 	roundPoint.y = A.y + size.h - radius - 1;
-	fillRoundHelper(roundPoint, radius, 2, color);
+	fillRoundHelper_2d(roundPoint, radius, 2, color);
 	roundPoint.x = A.x + radius;
 	roundPoint.y = A.y + size.h - radius - 1;
-	fillRoundHelper(roundPoint, radius, 3, color);
+	fillRoundHelper_2d(roundPoint, radius, 3, color);
 }
 
-void gfx2d_circle(gfx2dPoint_t A, uint32_t radius, uint16_t color) {
+void Gfx::circle_2d(gfx2dPoint_t A, uint32_t radius, uint16_t color) {
 	int32_t x = 0, y = radius;
 	int32_t e = 0, e1, e2;
 	while (x <= y) {
@@ -270,7 +260,7 @@ void gfx2d_circle(gfx2dPoint_t A, uint32_t radius, uint16_t color) {
 	}
 }
 
-void gfx2d_fillCircle(gfx2dPoint_t A, uint32_t radius, uint16_t color) {
+void Gfx::fillCircle_2d(gfx2dPoint_t A, uint32_t radius, uint16_t color) {
 	int32_t x = 0, y = radius;
 	int32_t e = 0, e1, e2;
 	while (x <= y) {
@@ -289,7 +279,7 @@ void gfx2d_fillCircle(gfx2dPoint_t A, uint32_t radius, uint16_t color) {
 	}
 }
 
-void gfx2d_ellipse(gfx2dPoint_t A, gfx2dRadius_t R, uint16_t color) {
+void Gfx::ellipse_2d(gfx2dPoint_t A, gfx2dRadius_t R, uint16_t color) {
 	int32_t x = 0, y = R.ry;
 	int32_t e = 0, e1, e2;
 	int32_t rx2 = R.rx * R.rx;
@@ -333,7 +323,7 @@ void gfx2d_ellipse(gfx2dPoint_t A, gfx2dRadius_t R, uint16_t color) {
 
 }
 
-void gfx2d_fillEllipse(gfx2dPoint_t A, gfx2dRadius_t R, uint16_t color) {
+void Gfx::fillEllipse_2d(gfx2dPoint_t A, gfx2dRadius_t R, uint16_t color) {
 
 	int32_t x = 0, y = R.ry;
 	int32_t e = 0, e1, e2;

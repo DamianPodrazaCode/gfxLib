@@ -15,7 +15,6 @@ public:
 private:
 
 protected:
-	void initExtraHardware();
 	void writeCMD(uint16_t cmd);
 	void writeDATA(uint16_t data);
 	void lcdBlOn();

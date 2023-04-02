@@ -6,9 +6,6 @@
 HwPort::HwPort() {
 }
 
-void HwPort::initExtraHardware() {
-}
-
 void HwPort::writeCMD(uint16_t cmd) {
 	*(__IO uint16_t*) (ADDR_CMD) = cmd;
 }

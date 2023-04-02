@@ -4,36 +4,31 @@
 #include "hwPort.h"
 #include "colors.h"
 #include "registers.h"
+#include "common.h"
 #include <stdint.h>
 #include <stdbool.h>
 
-#define swap(a, b) { int32_t t = a; a = b; b = t; }
+typedef enum {
+	scrOrientPortrait_0, scrOrientLandscape_90, scrOrientPortrait_180, scrOrientLandscape_270
+} scrOrient_t;
 
-class DrvILI9341: HwPort {
+class ScrDrv: HwPort {
 public:
-	typedef enum {
-		lcdOrientPortrait_0, lcdOrientLandscape_90, lcdOrientPortrait_180, lcdOrientLandscape_270
-	} lcdOrient_t;
-
-	DrvILI9341();
+	ScrDrv();
 
 private:
-	typedef struct {
-		int32_t width;
-		int32_t height;
-		lcdOrient_t orientation;
-	} lcdProperties_t;
-
-	lcdProperties_t lcdProp;
-
 	const uint16_t ILI9341_shorter_side_pixels = 240;
 	const uint16_t ILI9341_longer_side_pixels = 320;
 
-	inline void lcdSetWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
-	inline void lcdSetOrient(lcdOrient_t orientation);
-
 protected:
-	void drv_init(lcdOrient_t orientation);
+	int32_t width;
+	int32_t height;
+	scrOrient_t orientation;
+
+	inline void lcdSetWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
+	inline void lcdSetOrient(scrOrient_t orientation);
+
+	void drv_init(scrOrient_t orientation);
 	void clearScr(uint16_t color);
 	void drawPixel(int32_t x, int32_t y, uint16_t color);
 	void drawHLine(int32_t x1, int32_t x2, int32_t y, uint16_t color);
