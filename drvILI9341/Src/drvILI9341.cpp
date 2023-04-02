@@ -1,8 +1,9 @@
-#include "ili9341.h"
+#include "drvILI9341.h"
 
-lcdPropertiesTypeDef lcdProp;
+DrvILI9341::DrvILI9341() {
+}
 
-static inline void lcdSetWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1) {
+inline void DrvILI9341::lcdSetWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1) {
 	writeCMD(ILI9341_CASET);
 	writeDATA(x0 >> 8);
 	writeDATA(x0);
@@ -16,7 +17,7 @@ static inline void lcdSetWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t 
 	writeCMD(ILI9341_RAMWR);
 }
 
-static inline void lcdSetOrient(lcdOrient orientation) {
+inline void DrvILI9341::lcdSetOrient(lcdOrient_t orientation) {
 	// ILI9341_MADCTL
 	// bity D7	D6	D5	D4	D3	D2	D1	D0
 	//		MY	MX	MV	ML	BGR	MH	0	0
@@ -55,7 +56,7 @@ static inline void lcdSetOrient(lcdOrient orientation) {
 	lcdSetWindow(0, 0, lcdProp.width - 1, lcdProp.height - 1);
 }
 
-void drv_init(lcdOrient orientation) {
+void DrvILI9341::drv_init(lcdOrient_t orientation) {
 	initExtraHardware();
 	lcdBlOff(); // wyłączenie podświetlenia
 	lcdDelayMs(1); // HW reset
@@ -72,7 +73,7 @@ void drv_init(lcdOrient orientation) {
 	lcdBlOn(); // właczenie podświetlenia
 }
 
-void clearScr(uint16_t color) {
+void DrvILI9341::clearScr(uint16_t color) {
 	lcdSetWindow(0, 0, lcdProp.width - 1, lcdProp.height - 1);
 	int dimensions = lcdProp.width * lcdProp.height;
 	while (dimensions--) {
@@ -80,14 +81,14 @@ void clearScr(uint16_t color) {
 	}
 }
 
-inline void drawPixel(int32_t x, int32_t y, uint16_t color) {
+inline void DrvILI9341::drawPixel(int32_t x, int32_t y, uint16_t color) {
 	if ((x < lcdProp.width) && (y < lcdProp.height) && (x >= 0) && (y >= 0)) {
 		lcdSetWindow(x, y, x, y);
 		writeDATA(color);
 	}
 }
 
-inline void drawHLine(int32_t x1, int32_t x2, int32_t y, uint16_t color) {
+inline void DrvILI9341::drawHLine(int32_t x1, int32_t x2, int32_t y, uint16_t color) {
 	if ((x1 > lcdProp.width - 1) && (x2 > lcdProp.width - 1)) //jeżeli linia po za ekranem z prawej strony to nie rysuj w ogóle
 		return;
 	if ((x1 < 0) && (x2 < 0)) //jeżeli linia po za ekranem z lewej strony to nie rysuj w ogóle
@@ -105,7 +106,7 @@ inline void drawHLine(int32_t x1, int32_t x2, int32_t y, uint16_t color) {
 	}
 }
 
-inline void drawVLine(int32_t x, int32_t y1, int32_t y2, uint16_t color) {
+inline void DrvILI9341::drawVLine(int32_t x, int32_t y1, int32_t y2, uint16_t color) {
 	if ((y1 > lcdProp.height - 1) && (y2 > lcdProp.height - 1)) //jeżeli linia po za ekranem z dolnej strony to nie rysuj w ogóle
 		return;
 	if ((y1 < 0) && (y2 < 0)) //jeżeli linia po za ekranem z górnej strony to nie rysuj w ogóle
@@ -121,36 +122,36 @@ inline void drawVLine(int32_t x, int32_t y1, int32_t y2, uint16_t color) {
 		writeDATA(color);
 }
 
-inline void copyBuffer(uint16_t *buffer, int32_t x, int32_t y, uint32_t heigh, uint32_t width) {
-}
+//inline void copyBuffer(uint16_t *buffer, int32_t x, int32_t y, uint32_t heigh, uint32_t width) {
+//}
 
-// funkcje __weak, które trzeba stworzyć, zależnie od platformy
-
-__weak void initExtraHardware() {
-	// funkcja inicjalizyjąca dodatkowe ustawienia sprzętowe np.DMA
-}
-__weak void writeCMD(uint16_t cmd) {
-	// komenda do LCD
-}
-__weak void writeDATA(uint16_t data) {
-	// dane do LCD
-}
-__weak bool writeBUFFER(uint32_t buffer, uint32_t size) {
-	// kopiowanie całego bloku danych do LCD
-	return false;
-}
-__weak void lcdBlOn() {
-	// włączenie podświetlenia LCD
-}
-__weak void lcdBlOff() {
-	// wyłączenie podświetlenia LCD
-}
-__weak void lcdRstHI() {
-	// reset stan wysoki
-}
-__weak void lcdRstLOW() {
-	// reset stan niski
-}
-__weak void lcdDelayMs(uint32_t ms) {
-	// delay w ms
-}
+//// funkcje __weak, które trzeba stworzyć, zależnie od platformy
+//
+//__weak void initExtraHardware() {
+//	// funkcja inicjalizyjąca dodatkowe ustawienia sprzętowe np.DMA
+//}
+//__weak void writeCMD(uint16_t cmd) {
+//	// komenda do LCD
+//}
+//__weak void writeDATA(uint16_t data) {
+//	// dane do LCD
+//}
+//__weak bool writeBUFFER(uint32_t buffer, uint32_t size) {
+//	// kopiowanie całego bloku danych do LCD
+//	return false;
+//}
+//__weak void lcdBlOn() {
+//	// włączenie podświetlenia LCD
+//}
+//__weak void lcdBlOff() {
+//	// wyłączenie podświetlenia LCD
+//}
+//__weak void lcdRstHI() {
+//	// reset stan wysoki
+//}
+//__weak void lcdRstLOW() {
+//	// reset stan niski
+//}
+//__weak void lcdDelayMs(uint32_t ms) {
+//	// delay w ms
+//}
