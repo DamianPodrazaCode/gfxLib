@@ -72,7 +72,7 @@ void drv_init(lcdOrient orientation) {
 	lcdBlOn(); // właczenie podświetlenia
 }
 
-inline void clearScr(uint16_t color) {
+void clearScr(uint16_t color) {
 	lcdSetWindow(0, 0, lcdProp.width - 1, lcdProp.height - 1);
 	int dimensions = lcdProp.width * lcdProp.height;
 	while (dimensions--) {
