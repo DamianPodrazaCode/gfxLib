@@ -5,11 +5,6 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-//typedef struct {
-//	int width;
-//	int height;
-//} gfxScreenProperties_t;
-
 typedef struct {
 	int32_t x;
 	int32_t y;

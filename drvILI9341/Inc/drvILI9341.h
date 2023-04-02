@@ -28,7 +28,7 @@ protected:
 	inline void lcdSetWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
 	inline void lcdSetOrient(scrOrient_t orientation);
 
-	void drv_init(scrOrient_t orientation);
+	void drvInit(scrOrient_t orientation);
 	void clearScr(uint16_t color);
 	void drawPixel(int32_t x, int32_t y, uint16_t color);
 	void drawHLine(int32_t x1, int32_t x2, int32_t y, uint16_t color);

@@ -280,6 +280,8 @@ void Gfx::fillCircle_2d(gfx2dPoint_t A, uint32_t radius, uint16_t color) {
 }
 
 void Gfx::ellipse_2d(gfx2dPoint_t A, gfx2dRadius_t R, uint16_t color) {
+	if ((R.rx <= 0) || (R.ry <= 0))
+		return;
 	int32_t x = 0, y = R.ry;
 	int32_t e = 0, e1, e2;
 	int32_t rx2 = R.rx * R.rx;
@@ -324,7 +326,8 @@ void Gfx::ellipse_2d(gfx2dPoint_t A, gfx2dRadius_t R, uint16_t color) {
 }
 
 void Gfx::fillEllipse_2d(gfx2dPoint_t A, gfx2dRadius_t R, uint16_t color) {
-
+	if ((R.rx <= 0) || (R.ry <= 0))
+		return;
 	int32_t x = 0, y = R.ry;
 	int32_t e = 0, e1, e2;
 	int32_t rx2 = R.rx * R.rx;
@@ -336,8 +339,8 @@ void Gfx::fillEllipse_2d(gfx2dPoint_t A, gfx2dRadius_t R, uint16_t color) {
 		e1 = e + (fx << 1) + ry2;
 		e2 = e1 - (fy << 1) + rx2;
 		if ((e1 + e2) >= 0) {
-			drawHLine(-x + A.x, x + A.x, y + A.y, color);
-			drawHLine(-x + A.x, x + A.x, -y + A.y, color);
+			drawHLine(A.x - x, A.x + x, A.y + y, color);
+			drawHLine(A.x - x, A.x + x, A.y - y, color);
 			e = e2;
 			y--;
 			fy -= rx2;
@@ -348,13 +351,13 @@ void Gfx::fillEllipse_2d(gfx2dPoint_t A, gfx2dRadius_t R, uint16_t color) {
 	}
 
 	while (y >= 0) {
-		drawHLine(-x + A.x, x + A.x, y + A.y, color);
-		drawHLine(-x + A.x, x + A.x, -y + A.y, color);
+		drawHLine(A.x - x, A.x + x, A.y + y, color);
+		drawHLine(A.x - x, A.x + x, A.y - y, color);
 		e1 = e - (fy << 1) + rx2;
 		e2 = e1 + (fx << 1) + ry2;
 		y--;
 		fy -= rx2;
-		if (e1 + e2 < 0) {
+		if ((e1 + e2) < 0) {
 			e = e2;
 			x++;
 			fx += ry2;

@@ -56,7 +56,7 @@ inline void ScrDrv::lcdSetOrient(scrOrient_t orientation) {
 	lcdSetWindow(0, 0, width - 1, height - 1);
 }
 
-void ScrDrv::drv_init(scrOrient_t orientation) {
+void ScrDrv::drvInit(scrOrient_t orientation) {
 	lcdBlOff(); // wyłączenie podświetlenia
 	lcdDelayMs(1); // HW reset
 	lcdRstLOW();
@@ -69,6 +69,7 @@ void ScrDrv::drv_init(scrOrient_t orientation) {
 	writeCMD(ILI9341_SLPOUT); // wyjście z trybu uśpienia
 	lcdDelayMs(120);
 	writeCMD(ILI9341_DISPON); // włączenie wyświetlania
+	clearScr(COLOR_BLACK);
 	lcdBlOn(); // właczenie podświetlenia
 }
 

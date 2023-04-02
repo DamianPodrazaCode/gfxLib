@@ -3,8 +3,6 @@
 
 #include "main.h"
 #include "fsmc.h"
-#include "dma.h"
-
 #include <stdbool.h>
 #include <stdlib.h>
 

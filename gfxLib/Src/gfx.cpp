@@ -8,7 +8,7 @@ void Gfx::init(scrOrient_t scrOrient, int screenX, int screenY) {
 		width = screenX;
 		height = screenY;
 	}
-	drv_init(scrOrient);
+	drvInit(scrOrient);
 	scrWidth = width;
 	scrHeight = height;
 }
