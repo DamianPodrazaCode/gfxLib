@@ -13,6 +13,7 @@ public:
 private:
 
 protected:
+public:
 	void writeCMD(uint16_t cmd);
 	void writeDATA(uint16_t data);
 	void lcdBlOn();
