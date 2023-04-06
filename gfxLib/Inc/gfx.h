@@ -45,7 +45,6 @@ public:
 	void fillEllipse_2d(gfx2dPoint_t A, gfx2dRadius_t R, uint16_t color);
 
 private:
-
 	typedef struct {
 		int32_t e;
 		int32_t kx;

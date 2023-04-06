@@ -27,7 +27,6 @@ void ScrDrv::drvInit() {
 	lcdDelayMs(1);
 	lcdRstHI();
 	lcdDelayMs(120);
-	// -----------------------------------------
 
 	writeCMD(SSD1963_set_pll_mn);
 	writeDATA(0x0023);
@@ -88,7 +87,6 @@ void ScrDrv::drvInit() {
 	writeDATA(0x0001);
 
 	writeCMD(SSD1963_set_display_on);
-	// -----------------------------------------
 
 	clearScr(COLOR_BLACK);
 
