@@ -4,23 +4,6 @@ ScrDrv::ScrDrv() {
 }
 
 inline void ScrDrv::lcdSetWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1) {
-
-//		writeCMD(SSD1963_set_column_address);
-//		writeDATA(0);
-//		writeDATA(0);
-//		writeDATA(HDP >> 8);
-//		writeDATA(HDP & 0x00ff);
-//		writeCMD(SSD1963_set_page_address);
-//		writeDATA(0);
-//		writeDATA(0);
-//		writeDATA(VDP >> 8);
-//		writeDATA(VDP & 0x00ff);
-//		writeCMD(SSD1963_write_memory_start);
-//		//writeCMD(0x002c);
-//		for (int count = 0; count < 130560; count++) {
-//			writeDATA(COLOR_RED);
-//		}
-
 	writeCMD(SSD1963_set_column_address);
 	writeDATA(x0 >> 8);
 	writeDATA(x0);
@@ -34,43 +17,10 @@ inline void ScrDrv::lcdSetWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t
 	writeCMD(SSD1963_write_memory_start);
 }
 
-inline void ScrDrv::lcdSetOrient(scrOrient_t orientation) {
-	switch (orientation) {
-	case scrOrientPortrait_0:
-		width = SSD1963_shorter_side_pixels;
-		height = SSD1963_longer_side_pixels;
-//		writeCMD(SSD1963_set_address_mode);
-//		writeDATA(0b00001000);
-		break;
-	case scrOrientLandscape_90:
-		width = SSD1963_longer_side_pixels;
-		height = SSD1963_shorter_side_pixels;
-//		writeCMD(SSD1963_set_address_mode);
-//		writeDATA(0b00101000);
-		break;
-	case scrOrientPortrait_180:
-		width = SSD1963_shorter_side_pixels;
-		height = SSD1963_longer_side_pixels;
-//		writeCMD(SSD1963_set_address_mode);
-//		writeDATA(0b10001000);
-		break;
-	case scrOrientLandscape_270:
-		width = SSD1963_longer_side_pixels;
-		height = SSD1963_shorter_side_pixels;
-//		writeCMD(SSD1963_set_address_mode);
-//		writeDATA(0b11101000);
-		break;
-	default: //lcdOrientPortrait_0
-		width = SSD1963_shorter_side_pixels;
-		height = SSD1963_longer_side_pixels;
-//		writeCMD(SSD1963_set_address_mode);
-//		writeDATA(0b01001000);
-		break;
-	}
-	lcdSetWindow(0, 0, width - 1, height - 1);
-}
+void ScrDrv::drvInit() {
+	width = HDP + 1;
+	height = VDP + 1;
 
-void ScrDrv::drvInit(scrOrient_t orientation) {
 	lcdBlOff(); // wyłączenie podświetlenia
 	lcdDelayMs(1); // HW reset
 	lcdRstLOW();
@@ -137,11 +87,6 @@ void ScrDrv::drvInit(scrOrient_t orientation) {
 	writeDATA(0x0080);
 	writeDATA(0x0001);
 
-	lcdSetOrient(orientation); // ustawienie orientacji i trybu BGR na wyświetlaczu
-
-	writeCMD(SSD1963_set_address_mode);
-	writeDATA(0b00001010);
-
 	writeCMD(SSD1963_set_display_on);
 	// -----------------------------------------
 
@@ -178,7 +123,8 @@ void ScrDrv::drawHLine(int32_t x1, int32_t x2, int32_t y, uint16_t color) {
 		x1 = 0;
 	if ((y < height) && (y >= 0)) {
 		lcdSetWindow(x1, y, x2, y);
-		for (int16_t i = x1; i < x2; i++)
+		//for (int16_t i = x1; i < x2; i++)
+		while (x1 <= x2--)
 			writeDATA(color);
 	}
 }
@@ -195,6 +141,7 @@ void ScrDrv::drawVLine(int32_t x, int32_t y1, int32_t y2, uint16_t color) {
 	if (y1 < 0)
 		y1 = 0;
 	lcdSetWindow(x, y1, x, y2);
-	for (int16_t i = y1; i < y2; i++)
+	//for (int16_t i = y1; i < y2; i++)
+	while (y1 <= y2--)
 		writeDATA(color);
 }

@@ -28,7 +28,8 @@ public:
 	int32_t scrWidth;
 	int32_t scrHeight;
 
-	void init(scrOrient_t scrOrient, int screenX = 0, int screenY = 0);
+	//void init(scrOrient_t scrOrient, int screenX = 0, int screenY = 0);
+	void init(int screenX = 0, int screenY = 0);
 	void clr(uint16_t color);
 
 	void line_2d(gfx2dPoint_t A, gfx2dPoint_t B, uint16_t color);
